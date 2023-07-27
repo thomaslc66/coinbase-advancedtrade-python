@@ -16,22 +16,19 @@ class CBAuth:
         if params:
             query_params = '&'.join([f'{k}={v}' for k, v in params.items()])
             path = f'{path}?{query_params}'
-
         conn = http.client.HTTPSConnection("api.coinbase.com")
         try:
             timestamp = str(int(time.time()))
             message = timestamp + method.upper() + \
-                path.split('?')[0] + str(body)
+                path.split('?')[0] + str(body or '')
             signature = hmac.new(self.secret.encode(
                 'utf-8'), message.encode('utf-8'), digestmod=hashlib.sha256).hexdigest()
-
             headers = {
                 "accept": "application/json",
                 "CB-ACCESS-KEY": self.key,
                 "CB-ACCESS-SIGN": signature,
                 "CB-ACCESS-TIMESTAMP": timestamp
             }
-
             conn.request(method, path, body, headers)
             res = conn.getresponse()
             data = res.read()
