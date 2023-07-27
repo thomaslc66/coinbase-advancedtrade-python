@@ -9,20 +9,8 @@ I've developed this small bot using this Coinbase wrapper to suit my needs and I
 ## Features
 
 - Telegram bot base on the Conbaise Advanced Trade API wrapper
-- Possible to list accounts using bot command
-  ```bash
-  /listAccounts
-  ```
-- Possible to place BTC market order and limit order using bot command
-  ```bash
-  /buyBTC Currency Amount Price
-  /buyBTC EUR 10 -> buy BTC for 10 EUR
-  /buyBTC USD 0.0004 15000 -> place a limit order to buy 0.0004 BTC when price hit 15000USD
-  ```
-- Possible to ask for help using bot command
-  ```bash
-  /help
-  ```
+- Send command to bot to do action
+- Possibility to create Reccuring buy order (DCA)
 
 ## TODO
 
@@ -47,23 +35,93 @@ I've developed this small bot using this Coinbase wrapper to suit my needs and I
     ```
 
 3.  Set your CoinBase API key and secret in config.py. To obtain your API key and secret, follow the steps below:
+
     - Log in to your Coinbase account.
     - Navigate to API settings.
     - Create a new API key with the appropriate permissions.
     - Copy the API key and secret to config.py.
 
+4.  Create a telegram bot and retrive the token for that: https://core.telegram.org/bots/features#creating-a-new-bot
+
+- start a chat with @BotFather
+- send `/newbot`
+- then follow instruction and give your bot a name
+- then follow instruction and select a username for your bot
+- @BotFather will answer you and give you the token : <number>:<random_letter_and_number>
+- Copy that token in .env or .env.docker
+- if needed `/help` to see what you can do
+
 ## Usage
 
-Here's an example of how to use the package:
+Here's an example of how to use the repository:
+After cloning the repostitory you will have two files to edit.
 
-- Go in the main.py files and update the Coinbase API_KEY, API_SECRET and TELEGRAM
+#### To run it localy edit the .env file
 
-```python
-from telegram_bot import run_telegram_bot
+all api key need to be between " "
 
-if __name__ == '__main__':
-    run_telegram_bot()
 ```
+# Set your API key and secret
+API_KEY="api_key_example"
+API_SECRET="api_secret_example"
+TELEGRAM="telegram_bot_token_example"
+```
+
+Then you can call:
+
+```cmd
+python main.py
+```
+
+#### To run it using docker edit the .env.docker file
+
+all api key need to be without " " and without space
+
+```
+# Set your API key and secret
+API_KEY=api_key_example
+API_SECRET=api_secret_example
+TELEGRAM=telegram_bot_token_example
+```
+
+## Bot Commands
+
+- List accounts
+  ```bash
+  /listAccounts
+  ```
+- Place BTC market order
+  ```bash
+  /buyBTC Currency Amount
+  Example: /buyBTC EUR 10 -> Buy BTC for 10 EUR
+  ```
+- Place BTC Limit order
+  ```bash
+  /buyBTC Currency Amount Price
+  Example: /buyBTC USD 0.0004 15000 -> Place a limit order to buy 0.0004 BTC when price hit 15000 USD
+  ```
+- Create a daily market order
+  ```bash
+  /setDCA <job_name> <currency> <amount>
+  Example: /setDCA MY_DCA_JOB_NAME EUR 10 -> Place a daily market order for 10 EUR worth of Bitcoin
+  ```
+- Create a daily limit order
+  ```bash
+  /setDCA <job_name> <currency> <amount>
+  Example: /setDCA MY_DCA_JOB_NAME USD 0.0004 15000 -> Place a daily limit order to buy 0.0004 BTC when price hit 15000 USD
+  ```
+- List all current DCA jobs
+  ```bash
+  /listJobs
+  ```
+- Remove specific DCA job name
+  ```bash
+  /unsetDCA <job_name>
+  ```
+- Possible to ask for help using bot command
+  ```bash
+  /help
+  ```
 
 ## Documentation
 
