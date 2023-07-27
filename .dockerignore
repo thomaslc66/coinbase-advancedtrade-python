@@ -1,0 +1,9 @@
+.env
+.env.edit
+.gitignore
+LICENSE
+README.md
+test
+**/test
+__pycache__
+**/__pycache__
