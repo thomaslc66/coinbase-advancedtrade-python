@@ -2,12 +2,12 @@ import logging
 from telegram import Update
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
 from coinbase import buy_xx_amount_bitcoin, listAccounts, setCredentials
+from coinbase_advanced_trader.config import TELEGRAM
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
-
 
 # Extracting amount information to send formated answer to telgram
 async def extract_account_info(json_data):
@@ -135,7 +135,6 @@ def create_telegram_application(token):
     return application
 
 # Running Telegram bot
-def run_telegram_bot(api_key, api_secret, telegram_token):
-    setCredentials(api_key, api_secret)
-    telegram_application = create_telegram_application(telegram_token)
+def run_telegram_bot():
+    telegram_application = create_telegram_application(TELEGRAM)
     telegram_application.run_polling()

@@ -18,13 +18,7 @@ class Method(Enum):
 def generate_client_order_id():
     return str(uuid.uuid4())
 
-
 cb_auth = CBAuth(API_KEY, API_SECRET)
-
-def set_credentials(api_key, api_secret):
-    global cb_auth
-    cb_auth = CBAuth(api_key, api_secret)
-
 
 def listAccounts(limit=49, cursor=None):
     return cb_auth(Method.GET.value, f'{API_PATH}/accounts', params={'limit': limit, 'cursor': cursor})

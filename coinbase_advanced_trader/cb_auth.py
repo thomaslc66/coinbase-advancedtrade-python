@@ -6,7 +6,6 @@ import time
 from typing import Dict
 from coinbase_advanced_trader.config import API_KEY, API_SECRET
 
-
 class CBAuth:
     def __init__(self, api_key, api_secret):
         self.key = api_key
