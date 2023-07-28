@@ -3,6 +3,7 @@ import html
 import json
 import logging
 import traceback
+import datetime, pytz
 from telegram import __version__ as TG_VER
 
 try:
@@ -177,7 +178,8 @@ async def set_dca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         amount = context.args[2]
 
 
-        context.job_queue.run_repeating(dca_job, interval=10, first=2, chat_id=chat_id, name=dca_name, data=[dca_name, currency, amount, price])
+        context.job_queue.run_daily(dca_job, datetime.time(hour=12, minute=30, tzinfo=pytz.timezone('Europe/Zurich')),
+                                days=(0, 1, 2, 3, 4, 5, 6), chat_id=chat_id, name=dca_name, data=[dca_name, currency, amount, price])
         text = "DCA successfully set!"
         await update.effective_message.reply_text(text)
 
