@@ -26,14 +26,12 @@ I've developed this small telegram bot using this Coinbase wrapper to suit my ne
 
     ```bash
        git clone https://github.com/thomaslc66/coinbase-advancedtrade-python.git
-
     ```
 
 2.  Install the required Python packages:
 
     ```bash
        pip install -r requirements.txt
-
     ```
 
 3.  Set your CoinBase API key and secret in config.py. To obtain your API key and secret, follow the steps below:
@@ -117,24 +115,27 @@ docker run --env-file ./.env.docker coinbase-telegram
 ### Place BTC market order
   ```bash
   /buyBTC Currency Amount
-  Example: /buyBTC EUR 10 -> Buy BTC for 10 EUR
   ```
+  Example: /buyBTC EUR 10 -> Buy BTC for 10 EUR
+
   ![image](https://github.com/thomaslc66/coinbase-advancedtrade-python/assets/9827392/3f1dd366-23dd-4fa2-9d80-d644865b6e02)
 
 ### Place BTC Limit order
   Same as market order just set a price variable
   ```bash
   /buyBTC Currency Amount Price
-  Example: /buyBTC USD 0.0004 15000 -> Place a limit order to buy 0.0004 BTC when price hit 15000 USD
   ```
+  Example: /buyBTC USD 0.0004 15000 -> Place a limit order to buy 0.0004 BTC when price hit 15000 USD
+
   ![image](https://github.com/thomaslc66/coinbase-advancedtrade-python/assets/9827392/87189bf4-3768-4f24-b68a-9398a3785f1a)
 
 
 ### Create a daily market order
   ```bash
   /setDCA <job_name> <currency> <amount>
-  Example: /setDCA MY_DCA_JOB_NAME EUR 10 -> Place a daily market order for 10 EUR worth of Bitcoin
   ```
+Example: /setDCA MY_DCA_JOB_NAME EUR 10 -> Place a daily market order for 10 EUR worth of Bitcoin
+
 ![image](https://github.com/thomaslc66/coinbase-advancedtrade-python/assets/9827392/550306ed-5565-48d6-9f92-17beb922b4df)
 
 Then when order will be send at 12:30
@@ -144,8 +145,9 @@ Then when order will be send at 12:30
 ### Create a daily limit order
   ```bash
   /setDCA <job_name> <currency> <amount>
-  Example: /setDCA MY_DCA_JOB_NAME USD 0.0004 15000 -> Place a daily limit order to buy 0.0004 BTC when price hit 15000 USD
   ```
+Example: /setDCA MY_DCA_JOB_NAME USD 0.0004 15000 -> Place a daily limit order to buy 0.0004 BTC when price hit 15000 USD
+
 ### Remove specific DCA job name
   ```bash
   /unsetDCA <job_name>
