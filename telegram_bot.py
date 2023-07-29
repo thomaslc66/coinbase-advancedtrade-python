@@ -97,10 +97,13 @@ async def telegram_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text="You can use the following commands:\n"
             "/help - to get help on the command\n"
             "/listAccounts - to list all your accounts and the amount\n"
-            "/buyBTC currency* amount* price - Currency and Amount params are required, Price is for a limit order\n"
+            "/buyBTC <currency>* <amount>* price - Currency and Amount params are required, Price is for a limit order\n"
             "Example:\n"
             "/buyBTC EUR 10 -> Market order of 10€ worth of BTC\n"
             "/buyBTC USD 0.001 15000 -> Limit order to buy 0.001 BTC when the value hits 15000 USD"
+            "/setDCA <DCA_NAME>* <currency>* <amount>* <price> -> same logic as /buyBTC command but to place a daily (12:30) recurring order"
+            "/unsetDCA <DCA_NAME>* -> to remove the recurring order already in place"
+            "/listJobs -> will list all the recurring job in place"
 )
 
 async def telegram_buy_btc(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -145,6 +148,11 @@ async def telegram_buy_btc(update: Update, context: ContextTypes.DEFAULT_TYPE):
         response = await extract_order_info(response)
         await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{response}\nCurrency:{currency_param}\nAmount:{amount_param}\nPrice:{price_param}')
 
+
+#
+# TODO - give possibility to user to set specific day and time
+# TODO - set hour, minutes and timezone as variable
+#
 async def set_dca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handler for the Telegram command /setDCA.
 
@@ -187,7 +195,11 @@ async def set_dca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.effective_message.reply_text("Usage: /setDCA <dca_name>* <currency>* <amount>* <price>")
 
 async def dca_job(context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send the dca_job job."""
+    """ Execute the dca job each selected day.
+
+    will call be call daily
+    
+    """
     job = context.job
     dca_name,currency,amount,price = job.data
 
@@ -197,6 +209,9 @@ async def dca_job(context: ContextTypes.DEFAULT_TYPE) -> None:
     text+=f'Limit Order to buy {amount} of BTC when the price is equal to {price} {currency}' if price else f'Market Order to buy {amount} {currency} of BTC'
     await context.bot.send_message(job.chat_id, text=f"\nResponse: {response}\n\n{text}\n\nJob Name: {dca_name}")
 
+#
+#
+#
 async def unset_dca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
     """Remove job with given name. Returns whether job was removed."""
     try:
@@ -212,6 +227,9 @@ async def unset_dca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
     except (IndexError, ValueError):
         await update.effective_message.reply_text("Usage: /unsetDCA <name>\n/listJobs will give you the jobs name")
 
+#
+#
+#
 async def list_job(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         current_jobs = context.job_queue.jobs()
         list_str = ""
