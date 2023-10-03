@@ -65,6 +65,10 @@ def getProduct(product_id):
     return cb_auth(Method.GET.value, f'{API_PATH}/products/{product_id}')
 
 
+def getBuyPrice(currency_pair):
+    return cb_auth(Method.GET.value, f'{API_PATH}/prices/{currency_pair}/buy')
+
+
 def getProductCandles(product_id, start, end, granularity):
     params = {
         'start': start,

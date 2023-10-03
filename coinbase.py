@@ -7,6 +7,9 @@ def setCredentials(api_key, api_secret):
 def listAccounts():
     return coinbase_client.listAccount()
 
+def getCurrencyPrice(currency_pair):
+    return coinbase_client.getBuyPrice(currency_pair)
+
 def buy_xx_amount_bitcoin(amount, currency="USD", price=None):
     product_id = f"BTC-{currency}"
 

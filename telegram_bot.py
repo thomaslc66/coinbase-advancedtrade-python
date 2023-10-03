@@ -20,7 +20,7 @@ if __version_info__ < (20, 0, 0, "alpha", 1):
 from telegram import Update
 from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
-from coinbase import buy_xx_amount_bitcoin, listAccounts
+from coinbase import buy_xx_amount_bitcoin, listAccounts, getCurrencyPrice
 from coinbase_advanced_trader.config import TELEGRAM
 
 # Enable logging
@@ -101,6 +101,7 @@ async def telegram_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "/buyBTC EUR 10 -> Market order of 10€ worth of BTC\n"
             "/buyBTC USD 0.001 15000 -> Limit order to buy 0.001 BTC when the value hits 15000 USD"
 )
+    
 
 async def telegram_buy_btc(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handler for the Telegram command /buyBTC <currency>* <amount>* <price>.
@@ -210,6 +211,14 @@ async def unset_dca(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
     except (IndexError, ValueError):
         await update.effective_message.reply_text("Usage: /unsetDCA <name>\n/listJobs will give you the jobs name")
 
+async def telegram_get_currency_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    try:
+        currency_name = context.args[0]
+        await getCurrencyPrice(currency_name)
+    except:
+        await update.effective_message.reply_text("Usage: /price <currency_name>\n")
+
+
 async def list_job(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         current_jobs = context.job_queue.jobs()
         list_str = ""
@@ -262,6 +271,7 @@ def run_telegram_bot():
     application.add_handler(CommandHandler('listJobs', list_job))
     application.add_handler(CommandHandler('setDCA', set_dca))
     application.add_handler(CommandHandler('unsetDCA', unset_dca))
+    application.add_handler(CommandHandler('price', telegram_get_currency_price))
     application.add_handler(MessageHandler(filters.COMMAND, unknown))
     # ...and the error handler
     application.add_error_handler(error_handler)
